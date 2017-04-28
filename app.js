@@ -6,7 +6,7 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const routes = require('./routes')
 const PORT = 3000;
-
+const models = require('./models');
 //Rendering Section
 app.engine('html', nunjucks.render); // how to render html templates
 app.set('view engine', 'html'); // what file extension do our templates have
@@ -26,7 +26,10 @@ app.use(express.static(path.join(__dirname,'/public')))
 app.use('/',routes);
 
 //Listening on Port
-app.listen(PORT, function () {
-	console.log(`On ${PORT}`);
-})
+models.db.sync({force:true})
+.then(function handlerOne(value) {
+	app.listen(PORT, function () {
+		console.log(`On ${PORT}`);
+	})
+}).catch(console.error)
 
