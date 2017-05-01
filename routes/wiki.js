@@ -12,17 +12,35 @@ router.get('/', function (request,response,next) {
 
 router.post('/', function (request,response,next) {
 	var body = request.body;
-	User.findOne({
+	// User.findOne({
+	// 	where: {
+	// 		email:body.authorEmail
+	// 	}
+	// }).then(function (authorRow) {
+	// 	if(!authorRow){
+	// 		addNewUser(body,response)
+	// 	}else{
+	// 		NewPageWithAuthor(body,authorRow,response)
+	// 	}
+	// })
+	var id;
+	console.log(body.authorEmail)
+	User.findOrCreate({
 		where: {
+			name: body.authorName,
 			email:body.authorEmail
 		}
-	}).then(function (authorRow) {
-		if(!authorRow){
-			addNewUser(body,response)
-		}else{
-			NewPageWithAuthor(body,authorRow,response)
-		}
-	})
+	}).then(function(authorRow) {
+		id = authorRow[0];
+		console.log(authorRow);
+		return NewPageWithAuthor(body, authorRow, response);
+	}).then(function(page) {
+		return page.setAuthor(id);
+	}).then(function(pageWithAuthor) {
+		response.redirect('/');
+	});
+
+
 	
 });
 
@@ -60,14 +78,14 @@ function addNewUser(httpBody,responseObject) {
 }
 
 function NewPageWithAuthor(httpBody,authorInfo,responseObject) {
-	Page.build({
+	return Page.build({
 		title: httpBody.title,
 		content:httpBody.pageContent,
-		authorId:authorInfo.id
+		// authorId:authorInfo.id
 	}).save()
-	.then(function (value) {
-		responseObject.redirect('/');
-	})
+	// .then(function (value) {
+	// 	responseObject.redirect('/');
+	// })
 }
 
 

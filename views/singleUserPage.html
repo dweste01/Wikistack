@@ -1,0 +1,9 @@
+<h1>{{name}}</h1>
+<h2>{{email}}</h2>
+
+<ul>
+	<!-- {{users[0].name}} -->
+  {% for page in articles %}
+    <li><a href="/wiki/{{ page.id }}">{{ page.title }}</a></li>
+  {% endfor %}
+</ul>
