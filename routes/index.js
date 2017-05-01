@@ -5,7 +5,7 @@ const userPages = require('./users');
 const models = require('../models');
 const Page = models.Page;
 const User = models.User;
-
+Page.belongsTo(User, {as:'author'})
 module.exports = router;
 
 router.get('/', function (request,response,next) {
@@ -13,7 +13,7 @@ router.get('/', function (request,response,next) {
 	.then(function(allArticles) {
 		response.render('index', {pages: allArticles})
 	})
-	// response.render('index')
+	
 })
 
 router.use('/wiki', wikiPages)

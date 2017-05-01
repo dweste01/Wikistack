@@ -49,10 +49,10 @@ var User = db.define("user", {
 	},
 	email:{
 		type:Seq.STRING,
-		allowNull:false,
-		validate:{
-			isEmail:true
-		}	
+		allowNull:false
+		// validate:{
+		// 	isEmail:true
+		// }	
 	}
 })
 
