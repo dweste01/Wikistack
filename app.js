@@ -26,7 +26,7 @@ app.use(express.static(path.join(__dirname,'/public')))
 app.use('/',routes);
 
 //Listening on Port
-models.db.sync({force:true})
+models.db.sync()
 .then(function handlerOne(value) {
 	app.listen(PORT, function () {
 		console.log(`On ${PORT}`);

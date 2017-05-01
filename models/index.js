@@ -10,10 +10,7 @@ var Page = db.define("page", {
 	},
 	urlTitle:{
 		type:Seq.STRING,
-		allowNull:false,
-		validate:{
-			isUrl:true
-		}	
+		allowNull:false
 	},
 	content:{
 		type:Seq.TEXT,
@@ -27,7 +24,23 @@ var Page = db.define("page", {
 		defaultValue:Seq.NOW
 	}
 
+},{
+	getterMethods :{
+		route: function () {
+			return "/wiki/"+ this.getDataValue('urlTitle');
+		}
+	}
+});
+
+Page.hook('beforeValidate',function (newPage) {
+	var url = newPage.dataValues.title;
+	if(url){
+		newPage.dataValues.urlTitle = url.replace(/\s+/,"_").replace(/\W/g,'');
+	}else{
+		newPage.dataValues.urlTitle =  Math.random().toString(36).substring(2,7);
+	}
 })
+
 
 var User = db.define("user", {
 	name:{
